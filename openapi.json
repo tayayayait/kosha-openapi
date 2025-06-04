@@ -1,0 +1,169 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "KOSHA Safety and Health Law Smart Search API",
+    "description": "Search Korean occupational safety and health law information using AI-enhanced keyword search.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://apis.data.go.kr/B552468/srch",
+      "description": "Production API server"
+    }
+  ],
+  "paths": {
+    "/smartSearch": {
+      "get": {
+        "operationId": "smartSearch",
+        "summary": "Perform smart keyword search over safety and health legal data.",
+        "parameters": [
+          {
+            "name": "serviceKey",
+            "in": "query",
+            "required": true,
+            "description": "API key from data.go.kr",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "tBwybx8OYVndoOEn6IS1YEpdZqc86DmB6B95XK+tz4kZAgsSkC9GHgbMpCUafDAk7jywXRdVMBD0jbSoyzIH8g=="
+              ]
+            }
+          },
+          {
+            "name": "pageNo",
+            "in": "query",
+            "required": true,
+            "description": "Page number (minimum 1)",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "name": "numOfRows",
+            "in": "query",
+            "required": true,
+            "description": "Number of rows per page",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            }
+          },
+          {
+            "name": "searchValue",
+            "in": "query",
+            "required": true,
+            "description": "Search keyword, e.g., '사다리'",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "required": true,
+            "description": "Category to search: 0=All, 1=법, 2=령, ..., 11=유해작업 제한규칙",
+            "schema": {
+              "type": "integer",
+              "enum": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 11]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response": {
+                      "type": "object",
+                      "properties": {
+                        "header": {
+                          "type": "object",
+                          "properties": {
+                            "resultCode": { "type": "string" },
+                            "resultMsg": { "type": "string" }
+                          },
+                          "required": ["resultCode", "resultMsg"]
+                        },
+                        "body": {
+                          "type": "object",
+                          "properties": {
+                            "associated_word": {
+                              "type": "array",
+                              "items": { "type": "string" }
+                            },
+                            "categorycount": {
+                              "type": "object",
+                              "additionalProperties": { "type": "integer" }
+                            },
+                            "total_media": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "category": { "type": "string" },
+                                  "content": { "type": "string" },
+                                  "doc_id": { "type": "string" },
+                                  "filepath": { "type": "string" },
+                                  "highlight_content": { "type": "string" },
+                                  "image_path": {
+                                    "type": "array",
+                                    "items": { "type": "string" }
+                                  },
+                                  "keyword": { "type": "string" },
+                                  "med_thumb_yn": { "type": "string" },
+                                  "media_style": { "type": "string" },
+                                  "score": { "type": "number" },
+                                  "title": { "type": "string" }
+                                }
+                              }
+                            },
+                            "totalCount": { "type": "integer" },
+                            "dataType": { "type": "string" },
+                            "pageNo": { "type": "integer" },
+                            "numOfRows": { "type": "integer" },
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "item": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "category": { "type": "string" },
+                                      "content": { "type": "string" },
+                                      "doc_id": { "type": "string" },
+                                      "score": { "type": "number" },
+                                      "title": { "type": "string" },
+                                      "image_path": {
+                                        "type": "array",
+                                        "items": { "type": "string" }
+                                      },
+                                      "highlight_content": { "type": "string" },
+                                      "filepath": { "type": "string" },
+                                      "keyword": { "type": "string" },
+                                      "med_thumb_yn": { "type": "string" },
+                                      "media_style": { "type": "string" }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
